@@ -27,7 +27,11 @@ app.use((req, res, next) => {
 
 // database
 const db = require("./models/index");
-db.sequelize.sync();
+// db.sequelize.sync();
+db.sequelize.authenticate()
+    .then(() => {
+        console.log('Connected to database');
+    })
 // routes
 require("./routes/user.routes")(app)
 // require("./routes/posts.routes")(app)

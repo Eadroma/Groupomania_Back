@@ -24,7 +24,7 @@ exports.create = async (req, res) => {
             }
         });
         if (oldUser.length > 0)
-            return res.status(400).send({
+            return res.status(400).json({
                 message: 'User already exists' // A garder en anglais ?
             });
 
@@ -33,6 +33,7 @@ exports.create = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         const newUser = await User.create({
+            name: email.split('@')[0],
             email: email,
             password: hashedPassword
         });
@@ -52,7 +53,7 @@ exports.create = async (req, res) => {
                 id: newUser.id
             }
         });
-        res.status(201).send({
+        res.status(201).json({
             message: 'User created successfully',
             token: token
         });

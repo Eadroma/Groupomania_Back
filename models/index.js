@@ -10,10 +10,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     dialect: 'mysql',
     /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
 });
-sequelize.authenticate()
-    .then(() => {
-        console.log('Connected to database');
-    })
+
 const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
