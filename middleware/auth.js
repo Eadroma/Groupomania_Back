@@ -10,7 +10,7 @@ module.exports = async (req, res, next) => {
                 message: 'No token provided.' // A garder en anglais ?
             });
         }
-        const decodedToken = jwt.verify(token, process.env.TOKEN);
+        const decodedToken = jwt.verify(token, process.env.JWT_KEY);
         const user = await User.findOne({
             where: {
                 id: decodedToken.id
@@ -22,13 +22,6 @@ module.exports = async (req, res, next) => {
             });
         else {
             req.user = user;
-            if (decodedToken.isAdmin)
-                next();
-            if (req.params.id !== user.id) {
-                return res.status(403).json({
-                    message: 'You are not authorized to perform this action.' // A garder en anglais ?
-                });
-            }
             next();
         }
     } catch (error) {

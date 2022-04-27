@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
-
+const path = require('path');
 
 // Call an instance of express
 const app = express();
@@ -25,6 +25,7 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use('/images', express.static(path.join(__dirname, 'images')));
 // database
 const db = require("./models/index");
 // db.sequelize.sync();
