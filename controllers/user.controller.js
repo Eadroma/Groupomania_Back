@@ -71,6 +71,7 @@ exports.login = async (req, res) => {
             password
         } = req.body;
         // error handling
+
         if (!(email && password)) {
             return res.status(400).send({
                 message: 'Please fill all the fields' // A garder en anglais ?
@@ -163,14 +164,82 @@ exports.findAll = async (req, res) => {
         res.status(500).send(error);
     }
 }
+exports.uploadAvatar = async (req, res) => {
+    try {
+        const img = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+        await User.update({
+            imgUrl: img
+        }, {
+            where: {
+                id: req.user.id
+            }
+        });
+        const user = await User.findByPk(req.user.id, {
+            attributes: {
+                exclude: ['password', 'token']
+            }
+        });
+        return res.status(200).send({
+            message: 'User updated successfully',
+            user: user
+        });
+    } catch (error) {
+        console.error(error)
+        res.status(500).send(error);
+    }
+}
+exports.uploadCover = async (req, res) => {
+    try {
+        const img = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+        await User.update({
+            coverUrl: img
+        }, {
+            where: {
+                id: req.user.id
+            }
+        });
+        const user = await User.findByPk(req.user.id, {
+            attributes: {
+                exclude: ['password', 'token']
+            }
+        });
+        return res.status(200).send({
+            message: 'User updated successfully',
+            user: user
+        });
 
+    } catch (error) {
+        console.error(error)
+        res.status(500).send(error);
+    }
+}
+exports.upload = async (req, res) => {
+    try {
+        const imgType = req.params.imgType;
+        const img = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+        await User.update({
+            [imgType]: img
+        }, {
+            where: {
+                id: req.user.id
+            }
+        });
+        return res.status(200).send({
+            message: 'User updated successfully',
+            user: user
+        });
+
+    } catch (error) {
+        console.error(error)
+        res.status(500).send(error);
+    }
+}
 // update a user
 exports.update = async (req, res) => {
     try {
-        const id = req.params.id;
+        const id = req.user.id;
         const data = req.body;
 
-        const user = await User.findByPk(id);
         for (let key of Object.keys(data)) {
             if (!data[key]) {
                 delete data[key];
@@ -184,6 +253,7 @@ exports.update = async (req, res) => {
                 })
             }
         }
+        const user = await User.findByPk(id);
         return res.status(200).send({
             message: 'User updated successfully',
             user: user
@@ -213,6 +283,29 @@ exports.delete = async (req, res) => {
         return res.status(200).send({
             message: 'User deleted successfully' // A garder en anglais ?
         });
+    } catch (error) {
+        console.error(error)
+        res.status(500).send(error);
+    }
+}
+
+exports.me = async (req, res) => {
+    try {
+        const user = await User.findOne({
+            where: {
+                id: req.user.id
+            },
+            attributes: {
+                exclude: ['password']
+            }
+        });
+
+        if (!user)
+            return res.status(404).send({
+                message: 'User not found' // A garder en anglais ?
+            });
+
+        return res.status(200).send(user);
     } catch (error) {
         console.error(error)
         res.status(500).send(error);
