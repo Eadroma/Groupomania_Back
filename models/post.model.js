@@ -1,10 +1,6 @@
-const {
-    DataTypes
-} = require('sequelize');
-
 // We export a function that defines the model.
 // This function will automatically receive as parameter the Sequelize connection object.
-module.exports = (sequelize) => {
+module.exports = (sequelize, DataTypes) => {
     const Post = sequelize.define('posts', {
         // The following specification of the 'id' attribute could be omitted
         // since it is the default.
@@ -34,7 +30,7 @@ module.exports = (sequelize) => {
         },
         userLiked: {
             type: DataTypes.JSON,
-            defaultValue: {},
+            defaultValue: [],
         },
         likes: {
             type: DataTypes.INTEGER,
@@ -44,9 +40,6 @@ module.exports = (sequelize) => {
             type: DataTypes.JSON,
             defaultValue: [],
         },
-        date: {
-            type: DataTypes.STRING,
-        }
     });
     return Post;
 };

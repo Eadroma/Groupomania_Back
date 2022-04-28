@@ -1,6 +1,6 @@
 // We export a function that defines the model.
 // This function will automatically receive as parameter the Sequelize connection object.
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define('user', {
         // The following specification of the 'id' attribute could be omitted
         // since it is the default.
@@ -8,11 +8,11 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false,
             autoIncrement: true,
             primaryKey: true,
-            type: Sequelize.INTEGER
+            type: DataTypes.INTEGER
         },
         email: {
             allowNull: false,
-            type: Sequelize.STRING,
+            type: DataTypes.STRING,
             unique: true,
             validate: {
                 isEmail: true,
@@ -20,34 +20,30 @@ module.exports = (sequelize, Sequelize) => {
         },
         name: {
             allowNull: false,
-            type: Sequelize.STRING,
+            type: DataTypes.STRING,
         },
         password: {
             allowNull: false,
-            type: Sequelize.STRING(64),
+            type: DataTypes.STRING(64),
         },
         token: {
-            type: Sequelize.STRING,
+            type: DataTypes.STRING,
             default: null,
         },
-        posts: {
-            type: Sequelize.JSON,
-            allowNull: true
-        },
         coverUrl: {
-            type: Sequelize.STRING,
+            type: DataTypes.STRING,
             defaultValue: 'https://caltrout.org/wp-content/uploads/2016/02/header-placeholder.jpg'
         },
         imgUrl: {
-            type: Sequelize.STRING,
+            type: DataTypes.STRING,
             defaultValue: 'https://image.shutterstock.com/image-vector/user-account-circle-profile-line-600w-272552858.jpg'
         },
         description: {
-            type: Sequelize.STRING,
+            type: DataTypes.STRING,
             defaultValue: 'No description yet.'
         },
         isAdmin: {
-            type: Sequelize.BOOLEAN,
+            type: DataTypes.BOOLEAN,
             defaultValue: false
         }
     });

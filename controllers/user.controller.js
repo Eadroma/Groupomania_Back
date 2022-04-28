@@ -158,7 +158,7 @@ exports.findAll = async (req, res) => {
                 message: 'Users not found' // A garder en anglais ?
             });
 
-        return res.status(200).send(users);
+        return res.status(200).send(users.reverse());
     } catch (error) {
         console.error(error)
         res.status(500).send(error);

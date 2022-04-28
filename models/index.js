@@ -1,5 +1,6 @@
 const {
-    Sequelize
+    Sequelize,
+    DataTypes
 } = require('sequelize');
 // import env variables
 require('dotenv').config();
@@ -14,8 +15,8 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
 const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
-db.users = require('./user.model')(sequelize, Sequelize);
-db.posts = require('./post.model')(sequelize, Sequelize);
+db.users = require('./user.model')(sequelize, DataTypes);
+db.posts = require('./post.model')(sequelize, DataTypes);
 // db.comment = require('./comment.model')(sequelize, Sequelize);
 
 module.exports = db;
