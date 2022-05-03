@@ -28,13 +28,13 @@ app.use((req, res, next) => {
 app.use('/images', express.static(path.join(__dirname, 'images')));
 // database
 const db = require("./models/index");
-// db.sequelize.sync();
+db.sequelize.sync();
 db.sequelize.authenticate()
     .then(() => {
         console.log('Connected to database');
     })
 // routes
 require("./routes/user.routes")(app)
-// require("./routes/posts.routes")(app)
+require("./routes/post.routes")(app)
 
 module.exports = app;
