@@ -134,8 +134,8 @@ exports.findOne = async (req, res) => {
       where: {
         id: id,
       },
-      attribute: {
-        exclude: ["password"],
+      attributes: {
+        exclude: ["password", "token"],
       },
     });
 
@@ -245,6 +245,11 @@ exports.upload = async (req, res) => {
         },
       }
     );
+    const user = await User.findByPk(req.user.id, {
+      attributes: {
+        exclude: ["password", "token"],
+      },
+    });
     return res.status(200).send({
       message: "User updated successfully",
       user: user,
