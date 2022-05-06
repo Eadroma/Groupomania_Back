@@ -8,7 +8,6 @@ exports.create = async (req, res) => {
       : null;
     const content = req.body.content;
     const user = req.user;
-    console.log(img);
     const post = await posts.create({
       textContent: content,
       userName: user.name,
@@ -74,23 +73,34 @@ exports.getOne = async (req, res) => {
 
 exports.like = async (req, res) => {
   try {
+    console.log("pouet");
     const id = req.user.id;
     const post = await posts.findOne({
       where: {
         id: req.params.id,
       },
     });
-
     if (!post)
       return res.status(404).json({
         message: "Post not found",
         error: "Post not found",
       });
-    await posts.update({
-      userLiked: post.userLiked.includes(id)
-        ? post.userLiked.filter((user) => user !== id)
-        : [...post.userLiked, id],
-      likes: post.userLiked.includes(id) ? post.likes - 1 : post.likes + 1,
+    await posts.update(
+      {
+        userLiked: post.userLiked.includes(id)
+          ? post.userLiked.filter((user) => user !== id)
+          : [...post.userLiked, id],
+        likes: post.userLiked.includes(id) ? post.likes - 1 : post.likes + 1,
+      },
+      {
+        where: {
+          id: req.params.id,
+        },
+      }
+    );
+    res.status(200).json({
+      message: "Post liked successfully",
+      like: post.userLiked.includes(id) ? "dislike" : "like",
     });
   } catch (error) {
     console.error(error);
