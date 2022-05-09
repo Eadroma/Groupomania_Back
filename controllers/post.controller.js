@@ -110,3 +110,42 @@ exports.like = async (req, res) => {
     });
   }
 };
+
+exports.addComment = async (req, res) => {
+  try {
+    const { comment } = req.body;
+    const id = req.user.id;
+    const post = await posts.findOne({
+      where: {
+        id: req.params.id,
+      },
+    });
+    if (!post)
+      return res.status(404).json({
+        message: "Post not found",
+        error: "Post not found",
+      });
+    await posts.update(
+      {
+        comments: [
+          ...post.comments,
+          { userId: id, text: req.body.comment, date: new Date() },
+        ],
+      },
+      {
+        where: {
+          id: req.params.id,
+        },
+      }
+    );
+    res.status(200).json({
+      message: "Comment added successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error while adding comment",
+      error: error,
+    });
+  }
+};

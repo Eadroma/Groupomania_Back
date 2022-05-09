@@ -5,7 +5,6 @@ const User = db.users;
 module.exports = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
-    console.log("token: " + token + " is type of " + typeof token);
     if (!token || token == "null") {
       return res.status(401).json({
         message: "No token provided.", // A garder en anglais ?
