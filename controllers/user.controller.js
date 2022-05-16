@@ -338,3 +338,17 @@ exports.me = async (req, res) => {
     res.status(500).send(error);
   }
 };
+
+exports.getAllPosts = async (req, res) => {
+  try {
+    const posts = await Post.findAll({
+      where: {
+        userId: req.params.id,
+      },
+    });
+    return res.status(200).send(posts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+};

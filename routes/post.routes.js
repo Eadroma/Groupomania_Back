@@ -9,5 +9,7 @@ module.exports = (app) => {
   router.get("/:id", postController.getOne);
   router.post("/:id/like", auth, postController.like);
   router.post("/:id/comment", auth, postController.addComment);
+  router.put("/:id", auth, multer, postController.update);
+  router.delete("/:id", auth, postController.delete);
   app.use("/api/posts", router);
 };

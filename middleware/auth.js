@@ -18,14 +18,15 @@ module.exports = async (req, res, next) => {
     });
     if (!user)
       return res.status(401).json({
-        message: "Invalid token.", // A garder en anglais ?
+        message: "Invalid User.", // A garder en anglais ?
       });
     else {
       req.user = user;
       next();
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).send(error);
+    console.error("error: " + error);
+    console.log("middleware is crashing");
+    res.status(500).json(error);
   }
 };
