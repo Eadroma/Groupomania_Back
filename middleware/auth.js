@@ -10,20 +10,30 @@ module.exports = async (req, res, next) => {
         message: "No token provided.", // A garder en anglais ?
       });
     }
-    const decodedToken = jwt.verify(token, process.env.JWT_KEY);
-    const user = await User.findOne({
-      where: {
-        id: decodedToken.id,
-      },
-    });
-    if (!user)
-      return res.status(401).json({
-        message: "Invalid User.", // A garder en anglais ?
+    jwt.verify(token, process.env.JWT_KEY, async (error, decodedToken) => {
+      if (error) {
+        console.error(error);
+        return res.status(401).json({
+          message: "Invalid token.", // A garder en anglais ?
+        });
+      }
+      const user = await User.findOne({
+        where: {
+          // @ts-ignore
+          id: decodedToken.id,
+        },
+        attributes: {
+          exclude: ["password"],
+        },
       });
-    else {
-      req.user = user;
+      if (!user) {
+        return res.status(401).json({
+          message: "Invalid User.", // A garder en anglais ?
+        });
+      }
+      if (!req.user) req.user = user;
       next();
-    }
+    });
   } catch (error) {
     console.error("error: " + error);
     console.log("middleware is crashing");

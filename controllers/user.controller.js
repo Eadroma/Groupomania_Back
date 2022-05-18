@@ -102,7 +102,7 @@ exports.login = async (req, res) => {
       },
       process.env.JWT_KEY,
       {
-        expiresIn: "4h",
+        expiresIn: "24h",
       }
     );
     // add token to our new user
@@ -173,6 +173,7 @@ exports.findAll = async (req, res) => {
 };
 exports.uploadAvatar = async (req, res) => {
   try {
+    console.log(req.file);
     const img = `${req.protocol}://${req.get("host")}/images/${
       req.file.filename
     }`;
@@ -262,7 +263,7 @@ exports.upload = async (req, res) => {
 // update a user
 exports.update = async (req, res) => {
   try {
-    const id = req.user.id;
+    const id = req.params.id;
     const data = req.body;
 
     for (let key of Object.keys(data)) {

@@ -73,7 +73,6 @@ exports.getOne = async (req, res) => {
 
 exports.like = async (req, res) => {
   try {
-    console.log("pouet");
     const id = req.user.id;
     const post = await posts.findOne({
       where: {
@@ -98,7 +97,7 @@ exports.like = async (req, res) => {
         },
       }
     );
-    res.status(200).json({
+    return res.status(200).json({
       message: "Post liked successfully",
       like: post.userLiked.includes(id) ? "dislike" : "like",
     });
