@@ -18,7 +18,16 @@ app.use(
 app.use(helmet.permittedCrossDomainPolicies());
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*"); // to change with ip of our website
+  const allowedOrigins = [
+    "http://192.168.1.3:8080",
+    "http://localhost:8080",
+    "http://10.93.169.224:8080/",
+  ];
+  const origin = req.headers.origin;
+  console.log(origin);
+  if (allowedOrigins.includes(origin))
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  // res.setHeader("Access-Control-Allow-Origin", "*"); // to change with ip of our website
   res.setHeader(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
